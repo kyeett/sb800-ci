@@ -62,6 +62,10 @@ func main() {
 			Name:  "url",
 			Usage: "Url of switchbox800 cli",
 		},
+		cli.BoolFlag{
+			Name:  "status",
+			Usage: "Print status then quit",
+		},
 		cli.IntFlag{
 			Name:  "position",
 			Value: -1,
@@ -97,6 +101,11 @@ func main() {
 		sb := SwitchBox{
 			client: &http.Client{Timeout: time.Second * 10},
 			url:    url,
+		}
+
+		if c.Bool("status") {
+			sb.showStatus()
+			os.Exit(0)
 		}
 
 		if c.Int("position") < 0 || c.Int("position") > 8 {
@@ -182,8 +191,8 @@ func (sb SwitchBox) showStatusShort() {
 	printByteReverse(string(body[0:2]))
 }
 
-func showStatus(c *http.Client, url string) {
-	resp, err := c.Get("http://" + url + "/k0")
+func (sb SwitchBox) showStatus() {
+	resp, err := sb.client.Get("http://" + sb.url + "/k0")
 
 	if err != nil {
 		log.Fatal(err)
