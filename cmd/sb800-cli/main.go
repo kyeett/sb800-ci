@@ -126,7 +126,9 @@ func main() {
 		}
 
 		if c.Bool("off") && c.Bool("on") || c.Bool("reset") {
-			time.Sleep(500 * time.Millisecond)
+			fmt.Printf("\n\t(Sleep %d ms)\n", c.Int("sleep"))
+			time.Sleep(time.Duration(c.Int("sleep")) * time.Millisecond)
+			time.Sleep(time.Duration(c.Int("sleep")) * time.Millisecond)
 		}
 
 		if c.Bool("on") || c.Bool("reset") {
